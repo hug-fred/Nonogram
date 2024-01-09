@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class solverTest {
-
+    
     @Test
     public void shouldReCompareComb() {
         Solver sol = new Solver("/Users/hugofriederich/IdeaProjects/Picross/src/main/resources/fichierlignecolonnes");
