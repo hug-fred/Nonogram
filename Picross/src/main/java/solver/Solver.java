@@ -5,13 +5,13 @@ import picrossgame.EtatCase;
 import picrossgame.Picross;
 import picrossgame.SerieBloc;
 import math_library.Combinaisons;
-import math_library.Mathematique;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import static java.util.Arrays.stream;
+import static math_library.Mathematique.transpose;
 
 
 public class Solver {
@@ -26,9 +26,6 @@ public class Solver {
     private Boolean [] colonnes_termine = new Boolean[m];
 
 
-
-
-
     public Solver(String fichierContraites){
         this.picrossGame=new Picross(fichierContraites);
     }
@@ -41,7 +38,6 @@ public class Solver {
     /**
      * Première methode qui nettoie les blocs et blancs pour lesquelles leur position dans la grille est incertaine
      * @return une arraylist d'entiers contenant les emplacements des blancs et blocs dont on est certain de l'emplacement
-     * State : OK !
      */
     public static ArrayList<Integer> compareCombinaisons(Combinaisons listCombinaisons) {
         ArrayList<Integer> emplacementCertains = new ArrayList<>();
@@ -74,7 +70,7 @@ public class Solver {
      * @param combs
      * @return Combinaisons
      */
-    public static Combinaisons supprComb (ArrayList<Integer> result, Combinaisons combs){
+    public static void supprCombs(ArrayList<Integer> result, Combinaisons combs){
         //creation d'un iterrateur
         Iterator<ArrayList<Integer>> combIterator = combs.iterator();
         //tant qu'il y a des element dans combs
@@ -90,18 +86,16 @@ public class Solver {
                 }
             }
         }
-        return (combs);
     }
 
     /**
-     * Joint les deux résultats des lignes et colonnes dans une seule matrice
-     *
+     * Joint les deux résultats des lignes et colonnes dans une seule Combinaisons
      * @param lignes   : combinaisons lignes NON TRANSPOSES
      * @param colonnes : combinaisons colonnes NON TRANSPOSES
      * @return ArrayList<ArrayList < Integer>> : matrice de solution
      */
     public static Combinaisons joindreLignesColonnes(Combinaisons lignes, Combinaisons colonnes) {
-        Combinaisons transColonne = Mathematique.transpose(colonnes);
+        Combinaisons transColonne = transpose(colonnes);
         Combinaisons solutionMatrix = new Combinaisons();
         for (int i = 0; i < transColonne.size(); i++) {
             ArrayList<Integer> sousSolution = new ArrayList<>();
@@ -201,15 +195,21 @@ public class Solver {
         return combinasonsTranslatees;
     }
 
-
+    /**
+     * Vérifie si le puzzle est résolu ou non
+     * @return boolean
+     */
     private boolean check_solved() {
         return stream(lignes_termine).allMatch(Predicates.equalTo(true))
                 && stream(colonnes_termine).allMatch(Predicates.equalTo(true));
     }
 
 
-
-
+    /**
+     * Permet de résoudre le nonogram en considérant toutes les combinaisons possibles, en faisant leur intersection
+     * et en supprimant les informations redondantes au fure et à mesure
+     * @return EtatCase[][]
+     */
     public EtatCase[][] resoudre(){
         boolean isSolved=false;
 
@@ -219,29 +219,65 @@ public class Solver {
         Combinaisons colonneResult = new Combinaisons();
         Combinaisons finalResult = new Combinaisons();
 
+        //Initialisation
         for (int i = 1; i < n+1; i++) {
             Combinaisons combI = translateCombinaisons(i);
             combinaisonsLignes.add(combI);
-            lignesResult.add(compareCombinaisons(combI));
         }
         for (int j = n+1; j < n+m+1; j++) {
             Combinaisons combJ = translateCombinaisons(j);
             combinaisonsColonnes.add(combJ);
-            colonneResult.add(compareCombinaisons(combJ));
         }
 
-        finalResult=joindreLignesColonnes(lignesResult,colonneResult);
+        // Bouclage tant que le puzzle n'est pas résolue
+        while (isSolved==false){
 
-        /*
-        while (isSolved){
+            for (int i = 0; i < n; i++) {
+                Combinaisons combI=combinaisonsLignes.get(i);
+                ArrayList<Integer> resultLigne = compareCombinaisons(combI);
+                lignes_termine[i]=verifyState(resultLigne);
+                lignesResult.add(resultLigne);
 
+            }
+            for (int j = 0; j < m; j++) {
+                Combinaisons combJ = combinaisonsColonnes.get(j);
+                ArrayList<Integer> resultColonne = compareCombinaisons(combJ);
+                colonnes_termine[j]=verifyState(resultColonne);
+                colonneResult.add(resultColonne);
+            }
 
+            //met en commun le résultat sur les lignes et les colonnes
+
+            finalResult=joindreLignesColonnes(lignesResult,colonneResult);
+            lignesResult.clear();
+            colonneResult.clear();
+
+            for(int k=0;k<combinaisonsLignes.size();k++){
+                supprCombs(finalResult.get(k),combinaisonsLignes.get(k));
+            }
+            Combinaisons transposedFinalResult = transpose(finalResult);
+            for(int l=0;l<combinaisonsColonnes.size();l++){
+                supprCombs(transposedFinalResult.get(l),combinaisonsLignes.get(l));
+            }
             isSolved=check_solved();
         }
-        */
+
         solution= finalResult.toTable();
 
         return(solution);
+    }
+
+    /**
+     * Verifie si une ligne est résolue ou non
+     * @param finalComb
+     * @return boolean  (true si résolue et false sinon)
+     */
+    private boolean verifyState(ArrayList<Integer> finalComb) {
+        boolean state=true;
+        if (finalComb.contains(0)){
+            state=false;
+        }
+        return(state);
     }
 
 

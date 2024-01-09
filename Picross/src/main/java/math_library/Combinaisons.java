@@ -70,6 +70,10 @@ public class Combinaisons extends ArrayList {
         return(this.combs.toString());
     }
 
+    public void clear (){
+        this.combs.clear();
+    }
+
 
 
     public EtatCase[][] toTable(){

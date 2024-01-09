@@ -2,6 +2,7 @@ package test;
 
 import picrossgame.*;
 import com.google.common.collect.Lists;
+import solver.Solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,12 +39,16 @@ public class MainPicross {
 
 
     public static void main(String[] args) {
-
+        /*
         Picross picrossGame = new Picross(TEST,5,5);
         int n = picrossGame.getN();
         int m = picrossGame.getM();
         int tailleMaxH = picrossGame.maxContraintesLignes();
         int tailleMaxV = picrossGame.maxContraintesColonnes();
         picrossGame.jouer(SOLUTION);
+        */
+
+        Solver solution =new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
+        System.out.println(solution.resoudre());
     }
 }
