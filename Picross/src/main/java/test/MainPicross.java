@@ -1,5 +1,6 @@
 package test;
 
+import math_library.Combinaisons;
 import picrossgame.*;
 import com.google.common.collect.Lists;
 import solver.Solver;
@@ -46,9 +47,21 @@ public class MainPicross {
         int tailleMaxH = picrossGame.maxContraintesLignes();
         int tailleMaxV = picrossGame.maxContraintesColonnes();
         picrossGame.jouer(SOLUTION);
-        */
+
+         */
+
+
 
         Solver solution =new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
         System.out.println(solution.resoudre());
+
+
+
+
+        /*
+        Solver sol = new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
+        Combinaisons combs=sol.translateCombinaisons(1);
+        System.out.println(combs);
+        */
     }
 }

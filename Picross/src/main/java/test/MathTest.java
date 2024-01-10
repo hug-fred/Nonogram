@@ -2,13 +2,23 @@ package test;
 
 import math_library.Combinaisons;
 import math_library.Mathematique;
+import solver.Solver;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
 public class MathTest {
     public static void main(String[] args) {
 
-        Combinaisons combinaisons=new Combinaisons(2,4);
-        System.out.println(combinaisons);
-        System.out.println(Mathematique.transpose(combinaisons));
+        Solver sol = new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
+        Combinaisons combs=sol.translateCombinaisons(1);
+        ArrayList<Integer> result= new ArrayList(Arrays.asList(0,1,0,0,0));
+
+        System.out.println(combs);
+        Solver.supprCombs(result,combs);
+        System.out.println(combs);
+
 
     }
 }

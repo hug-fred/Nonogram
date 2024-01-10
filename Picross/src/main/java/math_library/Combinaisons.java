@@ -5,7 +5,7 @@ import picrossgame.EtatCase;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Combinaisons extends ArrayList {
+public class Combinaisons {
 
     private ArrayList<ArrayList<Integer>> combs;
 
@@ -72,6 +72,11 @@ public class Combinaisons extends ArrayList {
 
     public void clear (){
         this.combs.clear();
+    }
+
+
+    public void removeComb(int i){
+        this.combs.remove(i);
     }
 
 

@@ -64,6 +64,8 @@ public class Solver {
         return emplacementCertains;
     }
 
+
+
     /**
      * Permet de supprimer les combinaisons contenant des infirmations déjà trouvées
      * @param result
@@ -71,20 +73,25 @@ public class Solver {
      * @return Combinaisons
      */
     public static void supprCombs(ArrayList<Integer> result, Combinaisons combs){
-        //creation d'un iterrateur
-        Iterator<ArrayList<Integer>> combIterator = combs.iterator();
         //tant qu'il y a des element dans combs
-        while (combIterator.hasNext()){
-            ArrayList<Integer> nextComb = combIterator.next();
-            for (int j = 0; j < nextComb.size() ; j++) {
+        int i=combs.size()-1;
+        while (i>=0){
+            ArrayList<Integer> comb=combs.get(i);
+            for (int j = 0; j < comb.size() ; j++) {
 
-                if(result.get(j)==1 && nextComb.get(j)!=1){
-                    combIterator.remove();
+                if(result.get(j)==1 && comb.get(j)!=1){
+                    combs.removeComb(i);
+                    break;
                 }
-                if(result.get(j)==-1 && nextComb.get(j)!=-1){
-                    combIterator.remove();
+                if(result.get(j)==-1 && comb.get(j)!=-1){
+                    combs.removeComb(i);
+                    break;
+                }
+                if(result.get(j)==0){
+                    continue;
                 }
             }
+            i--;
         }
     }
 
@@ -249,17 +256,19 @@ public class Solver {
             //met en commun le résultat sur les lignes et les colonnes
 
             finalResult=joindreLignesColonnes(lignesResult,colonneResult);
-            lignesResult.clear();
-            colonneResult.clear();
 
+            //Suppression des informations
             for(int k=0;k<combinaisonsLignes.size();k++){
                 supprCombs(finalResult.get(k),combinaisonsLignes.get(k));
             }
             Combinaisons transposedFinalResult = transpose(finalResult);
             for(int l=0;l<combinaisonsColonnes.size();l++){
-                supprCombs(transposedFinalResult.get(l),combinaisonsLignes.get(l));
+                supprCombs(transposedFinalResult.get(l),combinaisonsColonnes.get(l));
             }
             isSolved=check_solved();
+            lignesResult.clear();
+            colonneResult.clear();
+            System.out.println(finalResult);
         }
 
         solution= finalResult.toTable();
