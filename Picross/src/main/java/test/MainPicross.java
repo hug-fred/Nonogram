@@ -50,10 +50,9 @@ public class MainPicross {
 
          */
 
-
-
         Solver solution =new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
         System.out.println(solution.resoudre());
+
 
 
 
