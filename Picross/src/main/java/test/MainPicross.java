@@ -40,27 +40,16 @@ public class MainPicross {
 
 
     public static void main(String[] args) {
-        /*
-        Picross picrossGame = new Picross(TEST,5,5);
+
+        String puzzle1="/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes";
+        String puzzle2="/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierContraintes2";
+        String puzzle7x7="/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierContraintes7x7";
+        String puzzle3x3="/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierContraintes3x3";
+
+        Picross picrossGame = new Picross(puzzle3x3);
         int n = picrossGame.getN();
         int m = picrossGame.getM();
-        int tailleMaxH = picrossGame.maxContraintesLignes();
-        int tailleMaxV = picrossGame.maxContraintesColonnes();
-        picrossGame.jouer(SOLUTION);
 
-         */
-
-        Solver solution =new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
-        System.out.println(solution.resoudre());
-
-
-
-
-
-        /*
-        Solver sol = new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
-        Combinaisons combs=sol.translateCombinaisons(1);
-        System.out.println(combs);
-        */
+        picrossGame.jouer(puzzle3x3);
     }
 }

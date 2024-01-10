@@ -8,7 +8,7 @@ import math_library.Combinaisons;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Iterator;
+
 
 import static java.util.Arrays.stream;
 import static math_library.Mathematique.transpose;
@@ -18,12 +18,7 @@ public class Solver {
 
     private Picross picrossGame;
 
-    // attention changer avec getN et getM mais ne fonctionne pas
-    final int n =5;
-    final int m =5;
-    private EtatCase[][] solution = new EtatCase[n][m];
-    private Boolean [] lignes_termine = new Boolean[n];
-    private Boolean [] colonnes_termine = new Boolean[m];
+
 
 
     public Solver(String fichierContraites){
@@ -206,9 +201,19 @@ public class Solver {
      * Vérifie si le puzzle est résolu ou non
      * @return boolean
      */
-    private boolean check_solved() {
-        return stream(lignes_termine).allMatch(Predicates.equalTo(true))
-                && stream(colonnes_termine).allMatch(Predicates.equalTo(true));
+    private boolean check_solved(Boolean[]lignes_termine,Boolean[]colonnes_termine) {
+        boolean isSolved=true;
+        for(Boolean lignes : lignes_termine){
+            if(lignes==false){
+                isSolved=false;
+            }
+        }
+        for(Boolean colonnes : colonnes_termine){
+            if(colonnes==false){
+                isSolved=false;
+            }
+        }
+        return(isSolved);
     }
 
 
@@ -218,7 +223,15 @@ public class Solver {
      * @return EtatCase[][]
      */
     public EtatCase[][] resoudre(){
+
         boolean isSolved=false;
+
+        int m=this.picrossGame.getM();
+        int n=this.picrossGame.getN();
+        EtatCase[][] solution = new EtatCase[n][m];
+        Boolean [] lignes_termine = new Boolean[n];
+        Boolean [] colonnes_termine = new Boolean[m];
+
 
         ArrayList<Combinaisons> combinaisonsLignes = new ArrayList<>();
         ArrayList<Combinaisons> combinaisonsColonnes = new ArrayList<>();
@@ -237,7 +250,7 @@ public class Solver {
         }
 
         // Bouclage tant que le puzzle n'est pas résolue
-        while (isSolved==false){
+        while (!isSolved){
 
             for (int i = 0; i < n; i++) {
                 Combinaisons combI=combinaisonsLignes.get(i);
@@ -265,10 +278,18 @@ public class Solver {
             for(int l=0;l<combinaisonsColonnes.size();l++){
                 supprCombs(transposedFinalResult.get(l),combinaisonsColonnes.get(l));
             }
-            isSolved=check_solved();
+            isSolved=check_solved(lignes_termine,colonnes_termine);
             lignesResult.clear();
             colonneResult.clear();
+            //Pour afficher la résolution petit à petit
             System.out.println(finalResult);
+            for(Boolean elt:lignes_termine){
+                System.out.print(elt +" ,");
+            }
+            for(Boolean elt:colonnes_termine){
+                System.out.print(elt +" ,");
+            }
+            System.out.println();
         }
 
         solution= finalResult.toTable();

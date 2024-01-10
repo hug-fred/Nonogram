@@ -1,6 +1,7 @@
 package picrossgame;
 
 import math_library.Mathematique;
+import solver.Solver;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -134,7 +135,7 @@ public class Picross {
     /**
      * Permets à l'utilisateur de rentrer les coordonées d'une case à remplir
      */
-    public static void rentrerCoordonees(EtatCase[][] tableauSuppose) {
+    public static void rentrerCoordonees(EtatCase[][] tableauARemplir) {
         PrintStream out = System.out;
         var suppressionMode = false;
         var emptyMode = false;
@@ -158,11 +159,11 @@ public class Picross {
             var x = Integer.valueOf(valeurs[0])-1;
             var y = Integer.valueOf(valeurs[1])-1;
             if (suppressionMode) {
-                tableauSuppose[x][y]=EtatCase.INCONNUE;
+                tableauARemplir[x][y]=EtatCase.INCONNUE;
             } else if (emptyMode) {
-                tableauSuppose[x][y]=EtatCase.VIDE;
+                tableauARemplir[x][y]=EtatCase.VIDE;
             }else {
-                tableauSuppose[x][y]=EtatCase.PLEIN;
+                tableauARemplir[x][y]=EtatCase.PLEIN;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             out.println(" Attention les coordonnées ne se situent pas sur le plateau de jeu");
@@ -172,29 +173,33 @@ public class Picross {
     /**
      * affichage dans la console du plateau de jeu
      */
-    public void jouer(EtatCase[][] tableauSolutions) {
+    public void jouer(String nomDuFichier) {
+        Solver solution=new Solver(nomDuFichier);
+        EtatCase[][] tableauSolution= solution.resoudre();
         PrintStream out = System.out;
         EtatCase[][] tableauARemplir = new EtatCase[this.n][this.m];
         List<ArrayList<String>> contraintesVerticales = this.afficherContraintesColonnes();
         List<ArrayList<String>> contraintesHorizontales = this.afficherContraintesLignes();
 
 
-        while (!Arrays.deepEquals(tableauARemplir, tableauSolutions)) {  //demande a l'utilisateur de rentrer des valeurs
+        while (!Arrays.deepEquals(tableauARemplir, tableauSolution)) {  //demande a l'utilisateur de rentrer des valeurs
 
-            out.println("Solution :");                      //affichage solution
+            //affichage solution trouvé par l'algorithme
+
             out.println();
             int n=this.getN();
             int m=this.getM();
 
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
-                    out.print(affichageCase(tableauSolutions[i][j]));
+                    out.print(affichageCase(tableauSolution[i][j]));
                 }
                 out.println();
             }
             out.println();
 
-            // affichage des contraintes des colonnes
+
+            // affichage des contraintes verticales
             for (ArrayList<String> ligne : contraintesVerticales) {
                 for (int i = 0; i < this.maxContraintesLignes() + 1; i++) {
                     out.print(" ");
@@ -205,7 +210,10 @@ public class Picross {
                 out.println();
             }
 
-            for (int i = 0; i < this.getN(); i++) {                          //affichage tableau + contraintes horizontales
+
+
+            //affichage tableau + contraintes horizontales
+            for (int i = 0; i < this.getN(); i++) {
                 for (int k = 0; k < contraintesHorizontales.get(0).size(); k++) {
                     out.print(contraintesHorizontales.get(i).get(k));
                 }
@@ -230,13 +238,14 @@ public class Picross {
      * @return une liste de contraintes
      */
     public List<ArrayList<String>> afficherContraintesColonnes() {
-        ArrayList<ArrayList<String>> contraintesHV = Mathematique.castSerieBlocToString(this.contraintes);
-        List<ArrayList<String>> contraintesVerticales = contraintesHV.subList(this.m, this.n + this.m);
+        ArrayList<ArrayList<String>> contraintes = Mathematique.castSerieBlocToString(this.contraintes);
+        List<ArrayList<String>> contraintesVerticales = contraintes.subList(this.m, this.n + this.m);
         for (ArrayList<String> contrainte : contraintesVerticales) {
-            if (contrainte.size() == this.maxContraintesLignes()) {
+            int max=this.maxContraintesColonnes();
+            if (contrainte.size() == max) {
                 continue;
             } else {
-                while (contrainte.size() < this.maxContraintesColonnes()) {       //completer avec des espaces pour avoir des list de mêmes tailles
+                while (contrainte.size() < max) {       //completer avec des espaces pour avoir des list de mêmes tailles
                     contrainte.addFirst(" ");
                 }
             }
@@ -257,7 +266,7 @@ public class Picross {
             if (contrainte.size() == this.maxContraintesLignes()) {
                 continue;
             } else {
-                while (contrainte.size() < this.maxContraintesColonnes()) {       //completer avec des espaces pour avoir des list de mêmes tailles
+                while (contrainte.size() < this.maxContraintesLignes()) {       //completer avec des espaces pour avoir des list de mêmes tailles
                     contrainte.addFirst(" ");
                 }
             }
