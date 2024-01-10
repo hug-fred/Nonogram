@@ -1,6 +1,6 @@
 package picrossgame;
 
-import math_library.Mathematique;
+import tools.Mathematique;
 import solver.Solver;
 
 import java.io.BufferedReader;
@@ -171,11 +171,32 @@ public class Picross {
     }
 
     /**
+     * Permet d'avoir une solution alternative sans contraindre l'utilisateur à remplir les cases vides
+     * !!Probleme de clonage du tableau
+     * @param solution
+     * @return
+     */
+    /*
+    public EtatCase[][] alternativeSolution(EtatCase[][] solution){
+        EtatCase[][] alternativeSolution=solution.clone();
+        for (int i =0;i<this.n;i++) {
+            for (int j = 0; j < this.m; j++) {
+                if(alternativeSolution[i][j]==EtatCase.VIDE){
+                    alternativeSolution[i][j]=EtatCase.INCONNUE;
+                }
+            }
+        }
+        return(alternativeSolution);
+    }
+    */
+
+    /**
      * affichage dans la console du plateau de jeu
      */
     public void jouer(String nomDuFichier) {
         Solver solution=new Solver(nomDuFichier);
         EtatCase[][] tableauSolution= solution.resoudre();
+        //EtatCase[][] alternativeSolution= alternativeSolution(tableauSolution);
         PrintStream out = System.out;
         EtatCase[][] tableauARemplir = new EtatCase[this.n][this.m];
         List<ArrayList<String>> contraintesVerticales = this.afficherContraintesColonnes();
@@ -198,7 +219,6 @@ public class Picross {
             }
             out.println();
 
-
             // affichage des contraintes verticales
             for (ArrayList<String> ligne : contraintesVerticales) {
                 for (int i = 0; i < this.maxContraintesLignes() + 1; i++) {
@@ -209,8 +229,6 @@ public class Picross {
                 }
                 out.println();
             }
-
-
 
             //affichage tableau + contraintes horizontales
             for (int i = 0; i < this.getN(); i++) {

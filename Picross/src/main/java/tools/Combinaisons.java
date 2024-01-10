@@ -1,9 +1,8 @@
-package math_library;
+package tools;
 
 import picrossgame.EtatCase;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Combinaisons {
 

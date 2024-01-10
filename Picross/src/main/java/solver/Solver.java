@@ -1,17 +1,16 @@
 package solver;
 
-import com.google.common.base.Predicates;
 import picrossgame.EtatCase;
 import picrossgame.Picross;
 import picrossgame.SerieBloc;
-import math_library.Combinaisons;
+import tools.Combinaisons;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 
 
 import static java.util.Arrays.stream;
-import static math_library.Mathematique.transpose;
+import static tools.Mathematique.transpose;
 
 
 public class Solver {
@@ -34,10 +33,11 @@ public class Solver {
      * Première methode qui nettoie les blocs et blancs pour lesquelles leur position dans la grille est incertaine
      * @return une arraylist d'entiers contenant les emplacements des blancs et blocs dont on est certain de l'emplacement
      */
-    public static ArrayList<Integer> compareCombinaisons(Combinaisons listCombinaisons) {
+    public static ArrayList<Integer> compareCombinaisons(Combinaisons listCombinaisons){
         ArrayList<Integer> emplacementCertains = new ArrayList<>();
         // taille d'une combinaison
         int tailleComb = listCombinaisons.get(0).size();
+
         if (listCombinaisons.size() == 1) {
             emplacementCertains = listCombinaisons.get(0);
             return emplacementCertains;

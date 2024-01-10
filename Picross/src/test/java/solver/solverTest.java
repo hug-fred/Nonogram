@@ -1,6 +1,6 @@
 package solver;
 
-import math_library.Combinaisons;
+import tools.Combinaisons;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

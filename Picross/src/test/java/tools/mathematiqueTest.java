@@ -1,4 +1,4 @@
-package math_library;
+package tools;
 
 import org.junit.jupiter.api.Test;
 import java.util.*;
