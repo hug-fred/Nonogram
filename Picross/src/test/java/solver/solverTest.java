@@ -12,7 +12,7 @@ public class solverTest {
 
     @Test
     public void shouldDeleteCombLigne2() {
-        Solver sol = new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/fichierlignecolonnes");
+        Solver sol = new Solver("/Users/hugofriederich/IdeaProjects/Nonogram/Picross/src/main/resources/1puzzle5x5");
         Combinaisons combs=sol.translateCombinaisons(4);
         ArrayList<Integer> result= new ArrayList(Arrays.asList(0,1,0,0,0));
 

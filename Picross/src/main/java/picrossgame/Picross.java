@@ -271,7 +271,7 @@ public class Picross {
         List<ArrayList<String>> contraintesTranspose = Mathematique.transposeStr(contraintesVerticales);
         return contraintesTranspose;
     }
-
+    
     /**
      * Permet d'afficher les contraintes en chaque début de lignes
      *
