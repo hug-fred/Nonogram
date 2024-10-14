@@ -13,6 +13,8 @@ public class MainPicross {
         Picross picrossGame = new Picross(puzzle10x10);
         int n = picrossGame.getN();
         int m = picrossGame.getM();
+        int n =0;
+
 
         picrossGame.jouer(puzzle10x10);
     }
