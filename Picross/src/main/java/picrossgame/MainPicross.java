@@ -18,5 +18,7 @@ public class MainPicross {
 
         picrossGame.jouer(puzzle10x10);
         System.out.println("hello world");
+        System.out.println("test");
+
     }
 }
